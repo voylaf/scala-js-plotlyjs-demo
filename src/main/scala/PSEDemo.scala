@@ -8,7 +8,7 @@ import Utils.PlotlyImplicitsAdditional._
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js
-import com.raquo.laminar.api.L.{all => _, _}
+import com.raquo.laminar.api.L._
 
 /*
  * Copyright (C) 31/10/17 // mathieu.leclaire@openmole.org

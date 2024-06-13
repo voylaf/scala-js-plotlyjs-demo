@@ -10,7 +10,7 @@ import org.scalajs.dom.raw.Element
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js
-import com.raquo.laminar.api.L.{all => _, _}
+import com.raquo.laminar.api.L._
 import scaladget.svg.path.Path
 
 import scala.util.Random

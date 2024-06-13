@@ -2,7 +2,7 @@ package plotlyjs.demo
 
 import scaladget.bootstrapnative.bsn.{Tab, Tabs, colBS, colSM, containerFluid, navbar_pills, row}
 import scaladget.highlightjs.HighlightJS
-import com.raquo.laminar.api.L.{all => _, _}
+import com.raquo.laminar.api.L._
 import org.scalajs
 import scaladget.bootstrapnative.bsnsheet
 
@@ -37,7 +37,7 @@ object PlotlyDemo {
     import com.definitelyscala.plotlyjs.plotlyConts._
     import scala.scalajs.js.JSConverters._
 
-    import com.raquo.laminar.api.L.{all => _, _}
+    import com.raquo.laminar.api.L._
     import scala.scalajs._
       """.stripMargin
 
@@ -107,7 +107,7 @@ object PlotlyDemo {
           .render
       )
 
-    documentEvents(_.onDomContentLoaded).foreach(_ =>
+    documentEvents.onDomContentLoaded.foreach(_ =>
       render(scalajs.dom.document.body, content)
     )(unsafeWindowOwner)
 

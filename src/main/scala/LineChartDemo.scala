@@ -4,7 +4,7 @@ import org.openmole.plotlyjs.all._
 import org.openmole.plotlyjs.PlotlyImplicits._
 import Utils.PlotlyImplicitsAdditional._
 import org.openmole.plotlyjs._
-import com.raquo.laminar.api.L.{all => _, _}
+import com.raquo.laminar.api.L._
 
 import scala.scalajs.js.JSConverters._
 

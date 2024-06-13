@@ -7,7 +7,7 @@ import Utils.PlotlyImplicitsAdditional._
 import org.openmole.plotlyjs.plotlyConts._
 
 import scala.scalajs.js
-import com.raquo.laminar.api.L.{all => _, _}
+import com.raquo.laminar.api.L._
 
 /*
  * Copyright (C) 24/03/16 // mathieu.leclaire@openmole.org
@@ -48,7 +48,7 @@ object ScatterDemo {
       )
 
     val config = Config.displayModeBar(false)
-    Plotly.plot(plotDiv.ref, js.Array(data), config = config)
+    Plotly.newPlot(plotDiv.ref, js.Array(data), config = config)
 
 
     plotDiv.ref.on(PlotEvent.HOVER, (d: PointsData) => {

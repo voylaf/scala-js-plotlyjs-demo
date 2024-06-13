@@ -1,6 +1,6 @@
 package plotlyjs.demo
 
-import com.raquo.laminar.api.L.{all => _, _}
+import com.raquo.laminar.api.L._
 
 /*
  * Copyright (C) 31/10/17 // mathieu.leclaire@openmole.org
