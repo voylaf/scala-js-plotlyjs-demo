@@ -1,15 +1,14 @@
-
 package plotlyjs.demo
-
 
 import org.openmole.plotlyjs.PlotMode.markers
 import org.openmole.plotlyjs._
 import org.openmole.plotlyjs.all._
 import org.openmole.plotlyjs.PlotlyImplicits._
+import Utils.PlotlyImplicitsAdditional._
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{all => _, _}
 
 /*
  * Copyright (C) 31/10/17 // mathieu.leclaire@openmole.org
@@ -36,48 +35,60 @@ object PSEDemo {
 
     val plotDiv = div()
 
-    val data = scatterternary.
-      a(Data.idealPSE("area").map{_._1}.toJSArray).
-      b(Data.idealPSE("compacity").map{_._2}.toJSArray).
-      c(Data.idealPSE("convexity").map{_._3}.toJSArray).
-      text(js.Array(Data.area, Data.compacity, Data.convexity)).
-      textPosition(TextPosition.topCenter).
-      set(markers).set(
-      marker.size(5).color(Color.rgb(122, 122, 122)).symbol(circle).opacity(0.5)
-    )._result
+    val data = scatterTernary
+      .a(Data.idealPSE("area").map { _._1 }.toJSArray)
+      .b(Data.idealPSE("compacity").map { _._2 }.toJSArray)
+      .c(Data.idealPSE("convexity").map { _._3 }.toJSArray)
+      .text(js.Array(Data.area, Data.compacity, Data.convexity))
+      .textPosition(TextPosition.topCenter)
+      .set(
+        marker
+          .size(5)
+          .color(Color.rgb(122, 122, 122))
+          .symbol(circle)
+          .opacity(0.5)
+      )
+      ._result
 
-    val values = Data.pse.map{p=>
-      if (p.dimension.name == "area") p.values.map{_/10000}
+    val values = Data.pse.map { p =>
+      if (p.dimension.name == "area") p.values.map { _ / 10000 }
       else p.values
     }
 
-    val data2 = scatterternary.
-      a(values(0).toJSArray).
-      b(values(1).toJSArray).
-      c(values(2).toJSArray).
-      text(js.Array("area", "compacity", "convexity")).
-      textPosition(TextPosition.topCenter).
-      set(markers).set(
-      marker.size(8).color(Color.rgb(122, 0, 0)).symbol(circle)
-    )._result
+    val data2 = scatterTernary
+      .a(values(0).toJSArray)
+      .b(values(1).toJSArray)
+      .c(values(2).toJSArray)
+      .text(js.Array("area", "compacity", "convexity"))
+      .textPosition(TextPosition.topCenter)
+//      .set(markers)
+      .set(
+        marker.size(8).color(Color.rgb(122, 0, 0)).symbol(circle)
+      )
+      ._result
 
-    val data3 = scatterternary.
-      a(js.Array(0.1).toJSArray).
-      b(js.Array(0.1).toJSArray).
-      c(js.Array(0.1).toJSArray).
-      text(js.Array("area", "compacity", "convexity")).
-      textPosition(TextPosition.topCenter).
-      set(markers).set(
-      marker.size(15).color(Color.rgb(0, 0, 122)).symbol(circle)
-    )._result
+    val data3 = scatterTernary
+      .a(js.Array(0.1).toJSArray)
+      .b(js.Array(0.1).toJSArray)
+      .c(js.Array(0.1).toJSArray)
+      .text(js.Array("area", "compacity", "convexity"))
+      .textPosition(TextPosition.topCenter)
+//      .set(markers)
+      .set(
+        marker.size(15).color(Color.rgb(0, 0, 122)).symbol(circle)
+      )
+      ._result
 
-    val layout = Layout.ternary(
-      ternary
-      //  .sum(100)
-        .aaxis(axis.dtick(0.1).title("Area"))
-        .baxis(axis.dtick(0.1).title("Compacity"))
-        .caxis(axis.dtick(0.1).title("Convexity"))
-    ).width(800).height(800)
+    val layout = Layout
+      .ternary(
+        ternary
+          //  .sum(100)
+          .aaxis(axis.dtick(0.1).title("Area"))
+          .baxis(axis.dtick(0.1).title("Compacity"))
+          .caxis(axis.dtick(0.1).title("Convexity"))
+      )
+      .width(800)
+      .height(800)
 
     Plotly.newPlot(plotDiv.ref, Array(data, data2).toJSArray, layout)
 

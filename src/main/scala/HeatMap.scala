@@ -3,8 +3,9 @@ package plotlyjs.demo
 import org.openmole.plotlyjs._
 import org.openmole.plotlyjs.all._
 import org.openmole.plotlyjs.PlotlyImplicits._
+import Utils.PlotlyImplicitsAdditional._
 import scala.scalajs.js
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{all => _, _}
 
 /*
  * Copyright (C) 31/10/18 // mathieu.leclaire@openmole.org

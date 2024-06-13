@@ -1,9 +1,10 @@
 package plotlyjs.demo
 
+import scaladget.bootstrapnative.bsn.{Tab, Tabs, colBS, colSM, containerFluid, navbar_pills, row}
 import scaladget.highlightjs.HighlightJS
-import scaladget.bootstrapnative.bsn._
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{all => _, _}
 import org.scalajs
+import scaladget.bootstrapnative.bsnsheet
 
 /*
  * Copyright (C) 31/10/17 // mathieu.leclaire@openmole.org
@@ -36,54 +37,80 @@ object PlotlyDemo {
     import com.definitelyscala.plotlyjs.plotlyConts._
     import scala.scalajs.js.JSConverters._
 
-    import com.raquo.laminar.api.L._
+    import com.raquo.laminar.api.L.{all => _, _}
     import scala.scalajs._
       """.stripMargin
 
+    lazy val random = new scala.util.Random()
 
     lazy val content =
-      div(containerFluid, marginLeft := "15", marginTop := "25",
+      div(
+        containerFluid,
+        marginLeft := "15",
+        marginTop := "25",
         h3("Build"),
-        div(row,
-          div(colSM, "Details on construction on ", a(href := "https://github.com/openmole/scala-js-plotlyjs", target := "_blank", "the scala-js-plotlyjs facade Github page"))
+        div(
+          row,
+          div(
+            colSM,
+            "Details on construction on ",
+            a(
+              href := "https://github.com/openmole/scala-js-plotlyjs",
+              target := "_blank",
+              "the scala-js-plotlyjs facade Github page"
+            )
+          )
         ),
         h3("Imports"),
         div(colSM, pre(code(cls("scala"), imports))),
-        Tabs.tabs(
-          for {
-            demo <- Seq(
-              LineChartDemo.elementDemo,
-              HistogramDemo.elementDemo,
-              ScatterDemo.elementDemo,
-              BoxDemo.elementDemo,
-              SplomDemo.elementDemo,
-              HeatMapDemo.elementDemo,
-              ErrorBarDemo.elementDemo,
-              PSESubPlots.elementDemo,
-              PSESVGDemo.elementDemo,
-              PSEDemo.elementDemo,
-              ParetoDemo.elementDemo,
-            )
-          } yield {
-            Tab(demo.title,
-              div(
-                h3(demo.title),
-                div(containerFluid,
-                  div(row, marginLeft := "15", marginTop := "25",
-                    div(colBS(demo.codeWidth), pre(code(cls := "scala", demo.cleanCode))),
-                    div(colBS(12 - demo.codeWidth), demo.element)
+        Tabs
+          .tabs(
+            for {
+              demo <- Seq(
+                LineChartDemo.elementDemo,
+                HistogramDemo.elementDemo,
+                ScatterDemo.elementDemo,
+                BoxDemo.elementDemo,
+                SplomDemo.elementDemo,
+                HeatMapDemo.elementDemo,
+                ErrorBarDemo.elementDemo,
+                PSESubPlots.elementDemo,
+                PSESVGDemo.elementDemo,
+                PSEDemo.elementDemo,
+                ParetoDemo.elementDemo
+              )
+            } yield {
+              Tab(
+                t = random.nextInt,
+                span(demo.title),
+                div(
+                  h3(demo.title),
+                  div(
+                    containerFluid,
+                    div(
+                      row,
+                      marginLeft := "15",
+                      marginTop := "25",
+                      div(
+                        colBS(demo.codeWidth),
+                        pre(code(cls := "scala", demo.cleanCode))
+                      ),
+                      div(colBS(12 - demo.codeWidth), demo.element)
+                    )
                   )
                 )
               )
-            )
-          },
-          tabStyle = navbar_pills
-        ).build.render
+            },
+            tabStyle = Seq(bsnsheet.navbar_pills)
+          )
+          .build
+          .render
       )
 
-    documentEvents.onDomContentLoaded.foreach { _ =>
+    documentEvents(_.onDomContentLoaded).foreach(_ =>
       render(scalajs.dom.document.body, content)
-    }(unsafeWindowOwner)
+    )(unsafeWindowOwner)
+
     // dom.document.body.appendChild(tags.script("hljs.initHighlighting();"))
   }
 }

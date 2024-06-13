@@ -1,16 +1,16 @@
 package plotlyjs.demo
 
-
 import org.openmole.plotlyjs.PlotMode.{markers, markersAndText}
 import org.openmole.plotlyjs._
 import org.openmole.plotlyjs.all._
 import org.openmole.plotlyjs.PlotlyImplicits._
+import Utils.PlotlyImplicitsAdditional._
 import org.openmole.plotlyjs.plotlyConts._
 import org.scalajs.dom.raw.Element
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{all => _, _}
 import scaladget.svg.path.Path
 
 import scala.util.Random
@@ -51,7 +51,9 @@ object ParetoDemo {
 
     val results = Data.dim8Sample100
 
-    val cpaVariability = Seq(0.0686544468026073, 0.08720490767943528, 0.1004942957820982, 0.11953341441462292, 0.1340278943366293, 0.14455564337712556, 0.15612690327097392, 0.18940249433650735)
+    val cpaVariability = Seq(0.0686544468026073, 0.08720490767943528,
+      0.1004942957820982, 0.11953341441462292, 0.1340278943366293,
+      0.14455564337712556, 0.15612690327097392, 0.18940249433650735)
     val maxCPAVariability = cpaVariability.max
 
     val rng = new Random(7)
@@ -89,7 +91,6 @@ object ParetoDemo {
     //          Seq(8.0, 0.0,4.0,8.0)
     //        )
 
-
     val colors = Seq(
       Color.rgb(136, 34, 85),
       Color.rgb(136, 204, 238),
@@ -101,15 +102,17 @@ object ParetoDemo {
       Color.rgb(0, 114, 178)
     )
 
-    val nbObjectives = results.headOption.headOption.map(_.length).getOrElse(2)
+    val nbObjectives = results.headOption.map(_.length).getOrElse(2)
 
     val TWO_PI = 2 * Math.PI
     val TO_DEGREES = 180 / Math.PI
 
-    val objectiveNames = cpaVariability.zipWithIndex map { case (c, ind) => s"Goal $ind [${(c * 100).toInt}%]" }
+    val objectiveNames = cpaVariability.zipWithIndex map { case (c, ind) =>
+      s"Goal $ind [${(c * 100).toInt}%]"
+    }
 
     //DISPLAY OBJECTIVES
-    val objectiveThetas = (0 to nbObjectives - 1).toArray.map {
+    val objectiveThetas = (0 until nbObjectives).toArray.map {
       _ * TWO_PI / nbObjectives
     }
 
@@ -119,17 +122,22 @@ object ParetoDemo {
 
     //val objectiveRs = (0 to nbObjectives - 1).toArray.map { _ => 1.2 }
 
-    val dataObjectives = objectiveThetas.zip(objectiveNames).zipWithIndex.map { case ((t, name), ind) => //case(t,name)=>
-      scatterpolar.
-        r(js.Array(0.4)).
-        theta(js.Array(t * TO_DEGREES)).
-        text(js.Array(name)).
-        fillPolar(ScatterPolar.toself).
-        textPosition(TextPosition.topCenter).
-        set(markersAndText).
-        set(marker.size(30).color(colors(ind)).symbol(square)
-      )._result
-    }.toSeq
+    val dataObjectives = objectiveThetas
+      .zip(objectiveNames)
+      .zipWithIndex
+      .map { case ((t, name), ind) => //case(t,name)=>
+        scatterPolar
+          .r(js.Array(0.4))
+          .theta(js.Array(t * TO_DEGREES))
+          .text(js.Array(name))
+          .fillPolar(ScatterPolar.toself)
+          .textPosition(TextPosition.topCenter)
+          .
+//        set(markersAndText).
+          set(marker.size(30).color(colors(ind)).symbol(square))
+          ._result
+      }
+      .toSeq
 
     //GET ALL MAX / OBJECTIVE
     val maxs = results.transpose.map {
@@ -149,16 +157,17 @@ object ParetoDemo {
     println("RESULTS " + results)
     println("NORMALIZED " + normalizedObjectiveResults)
 
-
     // BARYCENTER COMPUTATION
     val cartesianBarycenters = (normalizedObjectiveResults).map { weights =>
-
       val objSum = weights.sum
-      val weightedCoord = (weights zip cartesianObjectives) map { case (w, (x, y)) =>
-        (w * x, w * y)
+      val weightedCoord = (weights zip cartesianObjectives) map {
+        case (w, (x, y)) =>
+          (w * x, w * y)
       }
 
-      val weightedCoordSum = weightedCoord.reduceLeft[(Double, Double)] { case ((x1, y1), (x2, y2)) => (x1 + x2, y1 + y2) }
+      val weightedCoordSum = weightedCoord.reduceLeft[(Double, Double)] {
+        case ((x1, y1), (x2, y2)) => (x1 + x2, y1 + y2)
+      }
 
       (weightedCoordSum._1 / objSum, weightedCoordSum._2 / objSum)
 
@@ -179,7 +188,14 @@ object ParetoDemo {
 
     //println("PoLar BAry " + polarBarycenters)
 
-    case class Barycenter(r: Double, theta: Double, sector: Int, cpaVariability: Double, nbRepetitions: Int, label: String)
+    case class Barycenter(
+        r: Double,
+        theta: Double,
+        sector: Int,
+        cpaVariability: Double,
+        nbRepetitions: Int,
+        label: String
+    )
 
     // Sort points by angular sections
     val thetaSectors = {
@@ -198,44 +214,56 @@ object ParetoDemo {
 
     println("Theta sectors " + thetaSectors)
 
-
-    val barycenters = (polarBarycenters zip (repetitions zip (results.map { g => s"(${g.mkString(",")})" }))).map { case (((r, theta), (repetition, label))) =>
+    val barycenters = (polarBarycenters zip (repetitions zip (results.map { g =>
+      s"(${g.mkString(",")})"
+    }))).map { case (((r, theta), (repetition, label))) =>
       val index = (thetaSectors.search(theta).insertionPoint % nbObjectives)
 
       Barycenter(r, theta, index, cpaVariability(index), repetition, label)
     }
 
-   // println("baricenters " + barycenters)
-   // println("Labels " + results.map { g => s"(${g.mkString(",")})" }.toJSArray)
-    val barycenterDataSeq = barycenters.groupBy {
-      _.sector
-    }.map { case (sector, b) =>
-      val op = b.map {
-        _.cpaVariability / maxCPAVariability
-      }.toJSArray
+    // println("baricenters " + barycenters)
+    // println("Labels " + results.map { g => s"(${g.mkString(",")})" }.toJSArray)
+    val barycenterDataSeq = barycenters
+      .groupBy {
+        _.sector
+      }
+      .map { case (sector, b) =>
+        val op = b.map {
+          _.cpaVariability / maxCPAVariability
+        }.toJSArray
 
-      scatterpolar.
-        r(b.map {
-          _.r
-        }.toJSArray).
-        theta(b.map {
-          _.theta
-        }.toJSArray.map {
-          _ * TO_DEGREES
-        }).
-        text(b.map {
-          _.label
-        }.toJSArray).
-        hovertemplate("<b>%{text}</b>").
-        fillPolar(ScatterPolar.none).
-        set(markers).set(
-        marker
-          .opacity(op)
-          .size(b.map {
-            _.nbRepetitions.toDouble / 4 + 10
-          }.toJSArray).set(colors(sector)).set(line.width(2).set(Color.rgb(65, 65, 65))))._result
-    }
-
+        scatterPolar
+          .r(b.map {
+            _.r
+          }.toJSArray)
+          .theta(
+            b.map {
+              _.theta
+            }.toJSArray
+              .map {
+                _ * TO_DEGREES
+              }
+          )
+          .text(b.map {
+            _.label
+          }.toJSArray)
+          .hovertemplate("<b>%{text}</b>")
+          .fillPolar(ScatterPolar.none)
+          .
+//        set(markers).
+          set(
+            marker
+              .opacity(op)
+              .size(b.map {
+                _.nbRepetitions.toDouble / 4 + 10
+              }.toJSArray)
+              .set(colors(sector))
+              .set(line.width(2))
+              .set(Color.rgb(65, 65, 65))
+          )
+          ._result
+      }
 
     val graphWidth = 800
     val graphHeight = 800
@@ -245,22 +273,29 @@ object ParetoDemo {
       .height(graphHeight)
       .width(graphWidth)
       .showlegend(false)
-      .polar(polar
-        .bgcolor(Color.rgb(245, 245, 245))
-        .angularAxis(axis
-          .showticklabels(false)
-          .linewidth(2)
-          .gridcolor(Color.rgba(12, 12, 12, 0.2))
-          .ticks(TickType.outside)
-        )
-        .radialAxis(axis
-          .showticklabels(false)
-          .linewidth(0)
-          .ticks(TickType.none)
-        )
+      .polar(
+        polar
+          .bgcolor(Color.rgb(245, 245, 245))
+          .angularAxis(
+            axis
+              .showticklabels(false)
+              .linewidth(2)
+              .gridcolor(Color.rgba(12, 12, 12, 0.2))
+              .ticks(TickType.outside)
+          )
+          .radialAxis(
+            axis
+              .showticklabels(false)
+              .linewidth(0)
+              .ticks(TickType.none)
+          )
       )
 
-    Plotly.newPlot(plotDiv.ref, (dataObjectives ++ barycenterDataSeq).toJSArray, layout)
+    Plotly.newPlot(
+      plotDiv.ref,
+      (dataObjectives ++ barycenterDataSeq).toJSArray,
+      layout
+    )
 
     plotDiv
 

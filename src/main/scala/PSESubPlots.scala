@@ -3,7 +3,8 @@ package plotlyjs.demo
 import org.scalajs.dom.raw.{Element, MouseEvent}
 import plotlyjs.demo.Data.{DimensionName, PSEData, pse}
 import org.openmole.plotlyjs.PlotlyImplicits._
-import com.raquo.laminar.api.L._
+import Utils.PlotlyImplicitsAdditional._
+import com.raquo.laminar.api.L.{all => _, _}
 import scala.annotation.tailrec
 import org.openmole.plotlyjs._
 import org.openmole.plotlyjs.all._

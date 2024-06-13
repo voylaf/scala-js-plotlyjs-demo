@@ -1,11 +1,7 @@
 package plotlyjs.demo
 
-import org.openmole.plotlyjs._
-import scaladget.bootstrapnative.bsn._
-import scaladget.tools._
-import org.scalajs.dom.raw.{Element, MouseEvent}
 import plotlyjs.demo.Data.{DimensionName, PSEData, pse}
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.{all => _, _}
 import com.raquo.laminar.api.L.svg
 
 import scala.annotation.tailrec

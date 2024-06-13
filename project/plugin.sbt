@@ -1,4 +1,4 @@
-resolvers += Resolver.sonatypeRepo("releases")
+resolvers ++= Resolver.sonatypeOssRepos("snapshots")
 
 addSbtPlugin("org.scala-js" % "sbt-scalajs" % "1.16.0")
 
