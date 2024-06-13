@@ -1,23 +1,17 @@
-
-import sbt.IO
-
 name := "scala-js-plotlyjs-demo"
 
-scalaVersion := "2.13.5"
-crossScalaVersions := Seq("2.12.13", "2.13.5")
+scalaVersion := "2.13.14"
 
-val poltlyjsVersion = "1.5.6"
-val scaladgetVersion = "1.9.0"
-val laminarVersion = "0.12.2"
+val poltlyjsVersion = "1.6.2"
+val scaladgetVersion = "1.9.4"
+val laminarVersion = "17.0.0"
 
-resolvers += Resolver.bintrayRepo("definitelyscala", "maven")
-resolvers += Resolver.sonatypeRepo("snapshots")
 resolvers += Resolver.jcenterRepo
 
 lazy val runDemo = taskKey[Unit]("runDemo")
 
 lazy val demo = project.in(file(".")) enablePlugins (ScalaJSBundlerPlugin, JSDependenciesPlugin) settings(
-  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "1.1.0",
+  libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "2.8.0",
   libraryDependencies += "com.raquo" %%% "laminar" % laminarVersion,
   libraryDependencies += "org.openmole.scaladget" %%% "bootstrapnative" % scaladgetVersion,
   libraryDependencies += "org.openmole.scaladget" %%% "highlightjs" % scaladgetVersion,
@@ -25,12 +19,12 @@ lazy val demo = project.in(file(".")) enablePlugins (ScalaJSBundlerPlugin, JSDep
   libraryDependencies += "org.openmole" %%% "scala-js-plotlyjs" % poltlyjsVersion ,
   libraryDependencies += "com.lihaoyi" %%% "sourcecode" % "0.2.6",
   scalaJSUseMainModuleInitializer := true,
+  jsDependencies += "org.webjars.npm" % "plotly.js-dist" % "2.27.1" / "2.27.1/plotly.js",
   runDemo := {
     val demoResource = (Compile / resourceDirectory).value
     val jsBuild = (Compile / fastOptJS / webpack ).value.head.data
 
     IO.copyFile(jsBuild, target.value / "js/demoplotly.js")
-    IO.copyFile(crossTarget.value / s"${name.value}-jsdeps.js", target.value / "js/deps.js")
     IO.copyDirectory(demoResource, target.value)
   }
 
