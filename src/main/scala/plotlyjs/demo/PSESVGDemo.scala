@@ -1,8 +1,7 @@
 package plotlyjs.demo
 
-import plotlyjs.demo.Data.{DimensionName, PSEData, pse}
 import com.raquo.laminar.api.L._
-import com.raquo.laminar.api.L.svg
+import plotlyjs.demo.Data.{DimensionName, PSEData}
 
 import scala.annotation.tailrec
 

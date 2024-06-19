@@ -1,10 +1,10 @@
 package plotlyjs.demo
 
-import scaladget.bootstrapnative.bsn.{Tab, Tabs, colBS, colSM, containerFluid, navbar_pills, row}
-import scaladget.highlightjs.HighlightJS
 import com.raquo.laminar.api.L._
 import org.scalajs
+import scaladget.bootstrapnative.bsn.{Tab, Tabs, colBS, colSM, containerFluid, row}
 import scaladget.bootstrapnative.bsnsheet
+import scaladget.highlightjs.HighlightJS
 
 /*
  * Copyright (C) 31/10/17 // mathieu.leclaire@openmole.org
@@ -77,7 +77,8 @@ object PlotlyDemo {
                 PSESubPlots.elementDemo,
                 PSESVGDemo.elementDemo,
                 PSEDemo.elementDemo,
-                ParetoDemo.elementDemo
+                ParetoDemo.elementDemo,
+                ContourDemo.elementDemo,
               )
             } yield {
               Tab(
