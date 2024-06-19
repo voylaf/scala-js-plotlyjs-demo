@@ -41,6 +41,7 @@ object PSEDemo {
       .c(Data.idealPSE("convexity").map { _._3 }.toJSArray)
       .text(js.Array(Data.area, Data.compacity, Data.convexity))
       .textPosition(TextPosition.topCenter)
+      .setMode(markers)
       .set(
         marker
           .size(5)
@@ -61,7 +62,7 @@ object PSEDemo {
       .c(values(2).toJSArray)
       .text(js.Array("area", "compacity", "convexity"))
       .textPosition(TextPosition.topCenter)
-//      .set(markers)
+      .setMode(markers)
       .set(
         marker.size(8).color(Color.rgb(122, 0, 0)).symbol(circle)
       )
@@ -73,7 +74,7 @@ object PSEDemo {
       .c(js.Array(0.1).toJSArray)
       .text(js.Array("area", "compacity", "convexity"))
       .textPosition(TextPosition.topCenter)
-//      .set(markers)
+      .setMode(markers)
       .set(
         marker.size(15).color(Color.rgb(0, 0, 122)).symbol(circle)
       )

@@ -5,13 +5,10 @@ import org.openmole.plotlyjs._
 import org.openmole.plotlyjs.all._
 import org.openmole.plotlyjs.PlotlyImplicits._
 import Utils.PlotlyImplicitsAdditional._
-import org.openmole.plotlyjs.plotlyConts._
-import org.scalajs.dom.raw.Element
 
 import scala.scalajs.js.JSConverters._
 import scala.scalajs.js
 import com.raquo.laminar.api.L._
-import scaladget.svg.path.Path
 
 import scala.util.Random
 
@@ -132,9 +129,8 @@ object ParetoDemo {
           .text(js.Array(name))
           .fillPolar(ScatterPolar.toself)
           .textPosition(TextPosition.topCenter)
-          .
-//        set(markersAndText).
-          set(marker.size(30).color(colors(ind)).symbol(square))
+          .setMode(markersAndText)
+          .set(marker.size(30).color(colors(ind)).symbol(square))
           ._result
       }
       .toSeq
@@ -250,9 +246,8 @@ object ParetoDemo {
           }.toJSArray)
           .hovertemplate("<b>%{text}</b>")
           .fillPolar(ScatterPolar.none)
-          .
-//        set(markers).
-          set(
+          .setMode(markers)
+          .set(
             marker
               .opacity(op)
               .size(b.map {
